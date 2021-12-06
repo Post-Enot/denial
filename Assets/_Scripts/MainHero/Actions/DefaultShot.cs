@@ -15,6 +15,7 @@ namespace MainHero.Actions
 		protected override void OnInit()
 		{
 			_shootingCoroutine = new UniqueCoroutine(Performer, () => Shooting());
+			EnableInput();
 		}
 
 		public override void EnableInput()
@@ -39,6 +40,9 @@ namespace MainHero.Actions
 		{
 			Performer.View.SetTrigger(_parametersKey);
 			Performer.ChangeState(new Inactive(Performer));
+			GameObject bulletObject = Instantiate(Performer.DefaultBullet, Performer.BulletSpawnPoint, Quaternion.identity);
+			var bullet = bulletObject.GetComponent<Bullet>();
+			bullet.Fire(Vector2.left);
 			yield return new WaitForSeconds(_stunDuration);
 			Performer.ChangeState(new Default(Performer));
 		}
